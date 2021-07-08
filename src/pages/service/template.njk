@@ -1,0 +1,180 @@
+{%- extends '../../common/layouts/default.njk' -%}
+{%- set page_title = service.name + ' statistics' -%}
+
+{%- block content -%}
+
+<h1 class="govuk-heading-xl">
+  {{service.name}}
+</h1>
+<h4 class="govuk-visually-hidden">
+  Risk rating for {{service.name}}
+</h4>
+{%- if service.risk === 'high' -%}
+  {%- set tag_text = service.risk + ' risk' -%}
+  {%- set tag_class = 'govuk-tag--red' -%}
+{%- elif service.risk === 'medium' -%}
+  {%- set tag_text = service.risk + ' risk' -%}
+  {%- set tag_class = 'govuk-tag--orange' -%}
+{%- elif service.risk === 'low' -%}
+  {%- set tag_text = service.risk + ' risk' -%}
+  {%- set tag_class = 'govuk-tag--yellow' -%}
+{%- elif service.risk === 'compliant' -%}
+  {%- set tag_text = service.risk -%}
+  {%- set tag_class = 'govuk-tag--green' -%}
+{%- else -%}
+  {%- set tag_text = service.risk + ' risk' -%}
+  {%- set tag_class = 'govuk-tag--grey' -%}
+{%- endif -%}
+{{ govukTag({
+  text: tag_text,
+  classes: tag_class
+}) }}
+
+<h4 class="govuk-visually-hidden">
+  Service type for {{service.name}}
+</h4>
+{{ govukTag({
+  text: service.type + ' facing'
+}) }}
+
+{% if service.sunsetting === true %}
+  {{ govukTag({
+    text: 'Sunsetting',
+    classes: 'govuk-tag--pink'
+  }) }}
+{% endif %}
+
+
+{{ govukTag({
+    text: "In House",
+    classes: 'govuk-tag--pink'
+  }) }}
+
+<h4 class="govuk-visually-hidden">Contact for {{service.name}}</h4>
+<p class="govuk-body">
+  {{ service.contact_name }} <a href="mailto:{{ service.contact_email}}">{{ service.contact_email}}</a>
+</p>
+
+{% if service.planned_compliance === true %}
+  {{ progressBar({
+    heading: 'Progress',
+    heading_level: 4,
+    compliance_rate: service.stats.progress,
+    stat_summary: (totalTextTrue if params.stats_type === 'true' else totalTextStrategic)
+  }) }}
+{% else %}
+  {{ govukWarningText({
+    text: "This service has no plans for compliance.",
+    iconFallbackText: "Important"
+  }) }}
+{% endif %}
+
+{%- if service.evidence.wcag.fails.length > 0 -%}
+  {# WCAG Fails #}
+{%- endif -%}
+
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      WCAG 2.1 audit
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{service.evidence.audit.status|capitalize}}
+      {%- if service.evidence.audit.link.length > 0 -%}
+      <br />
+      <a class="govuk-link" href="{{service.evidence.audit.link}}">
+        View audit carried out by {{service.evidence.audit.body}}<span class="govuk-visually-hidden"> for {{service.name}}</span>
+      </a>
+    {%- endif -%}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      WCAG 2.1 <br />
+      manual checks
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{service.evidence.wcag.status|capitalize}}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      User research
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{service.evidence.user_research.status|capitalize}}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Screenreader testing
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{service.evidence.screenreader.status|capitalize}}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Speech recognition testing
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{service.evidence.speech_recognition.status|capitalize}}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Magnifier testing
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{service.evidence.magnifier.status|capitalize}}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Accessibility statement
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{service.evidence.statement.status|capitalize}}
+      {%- if service.evidence.statement.link.length > 0 -%}
+      <br />
+      <a class="govuk-link" href="{{service.evidence.statement.link}}">
+        View accessibility statement <span class="govuk-visually-hidden"> for {{service.name}}</span>
+      </a>
+    {%- endif -%}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    {% set recent = (service.engagement| sort(attribute='when') | last) %}
+    <dt class="govuk-summary-list__key">
+      Last engagement
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{ recent.when }}
+    </dd>
+  </div>
+</dl>
+<table class="govuk-table">
+  <caption class="govuk-table__caption govuk-table__caption--m">Engagements and Communications</caption>
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Who</th>
+      <th scope="col" class="govuk-table__header">What</th>
+      <th scope="col" class="govuk-table__header">When</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    {%- for item in service.engagement|sort(attribute='when') -%}
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">{{ item.who }}</td>
+      <td class="govuk-table__cell">{{ item.what }}</td>
+      <td class="govuk-table__cell">{{ item.when }}</td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+</div>
+
+
+
+{%- endblock -%}

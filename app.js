@@ -56,6 +56,7 @@ app.use('/', require('./src/pages/filter-service-compliant/routes'))
 app.use('/', require('./src/pages/overview/routes'))
 app.use('/', require('./src/pages/directorate/routes'))
 app.use('/', require('./src/pages/function/routes'))
+app.use('/', require('./src/pages/service/routes'))
 
 app.use('/', (err, req, res, next) => {
   if (err) {

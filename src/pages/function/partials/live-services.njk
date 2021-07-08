@@ -9,7 +9,7 @@
             <span class="govuk-visually-hidden"> also known as</span><span class="govuk-caption-m">{{service.alias}}</span>
           {%- endif -%}
         </h3>
-       
+
         <h4 class="govuk-visually-hidden">
           Risk rating for {{service.name}}
         </h4>
@@ -48,6 +48,7 @@
           }) }}
         {% endif %}
 
+
         <h4 class="govuk-visually-hidden">Notes for {{service.name}}</h4>
         <p>
           {{service.notes}}
@@ -66,7 +67,7 @@
             iconFallbackText: "Important"
           }) }}
         {% endif %}
-        
+
         {%- if service.evidence.wcag.fails.length > 0 -%}
           {# WCAG Fails #}
         {%- endif -%}
@@ -117,6 +118,15 @@
                 View accessibility statement <span class="govuk-visually-hidden"> for {{service.name}}</span>
               </a>
             {%- endif -%}
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            {% set recent = (service.engagement | last) %}
+            <dt class="govuk-summary-list__key">
+              Last engagement
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{ recent.when }}
             </dd>
           </div>
         </dl>

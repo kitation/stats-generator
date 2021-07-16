@@ -44,11 +44,15 @@
   }) }}
 {% endif %}
 
-
 {{ govukTag({
     text: "In House",
     classes: 'govuk-tag--pink'
   }) }}
+
+  {{ govukTag({
+      text: "High Profile",
+      classes: 'govuk-tag--red'
+    }) }}
 
 <h4 class="govuk-visually-hidden">Contact for {{service.name}}</h4>
 <p class="govuk-body">
@@ -141,6 +145,12 @@
         View accessibility statement <span class="govuk-visually-hidden"> for {{service.name}}</span>
       </a>
     {%- endif -%}
+    {%- if service.evidence.statement.link_to_dispro_assessment.length > 0 -%}
+    <br />
+    <a class="govuk-link" href="{{service.evidence.statement.link_to_dispro_assessment}}">
+      View assessment <span class="govuk-visually-hidden"> for {{service.name}}</span>
+    </a>
+  {%- endif -%}
     </dd>
   </div>
   <div class="govuk-summary-list__row">

@@ -4,7 +4,7 @@
     {%- for service in liveServices -%}
       <div class="govuk-!-margin-bottom-9">
         <h3 class="govuk-heading-m">
-          {{service.name}}
+          <a href="{{service.url}}">{{service.name}}</a>
           {%- if service.alias.length > 0 -%}
             <span class="govuk-visually-hidden"> also known as</span><span class="govuk-caption-m">{{service.alias}}</span>
           {%- endif -%}

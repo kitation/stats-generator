@@ -1,0 +1,134 @@
+{%- extends '../../common/layouts/default.njk' -%}
+{%- set page_title = 'Overview' -%}
+
+{%- block content -%}
+
+<h1 class="govuk-heading-xl">
+  <span class="govuk-caption-xl">{{config.org_name}}</span>
+  Accessibility compliance
+</h1>
+
+<p class="govuk-body">
+  These statistics were generated using the evidence which was stored in the
+  <a class="govuk-link" href="{{config.org_repo}}">{{config.org_name}} accessibility compliance repository</a>. If you disagree
+  with any of the statistics against a particular service, please send any updated
+  evidence to
+  <a class="govuk-link" href="mailto:{{config.contact_email}}">{{config.contact_email}}</a>.
+</p>
+
+<p class="govuk-body">
+  There is still audit work going on to fully understand our services. You can read
+  the <a class="govuk-link" href="/next-steps-for-this-report">next steps for this
+  report</a> to see how you can help.
+</p>
+
+<h2 class="govuk-heading-l">What is compliance?</h2>
+<p class="govuk-body">
+  True compliance is the number of services which are covered by the Public
+  Sector Bodies Accessibility Regulations 2018.
+</p>
+
+
+<div class=" govuk-!-margin-top-9">
+  <h2 class="govuk-heading-l">
+    {{config.org_name}} overview
+  </h2>
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: {
+          html: '<strong>Total <span class="govuk-visually-hidden">number of services which are</span> live:</strong>'
+        },
+        value: {
+          text: overview.stats.total_live
+        }
+      },
+      {
+        key: {
+          html: '<strong class="govuk-tag govuk-tag--red">High risk<span class="govuk-visually-hidden"> services</span>:</strong>'
+        },
+        value: {
+          text: overview.stats.high_risk
+        }
+      },
+      {
+        key: {
+          html: '<strong class="govuk-tag govuk-tag--orange">Medium risk<span class="govuk-visually-hidden"> services</span>:</strong>'
+        },
+        value: {
+          text: overview.stats.medium_risk
+        }
+      },
+      {
+        key: {
+          html: '<strong class="govuk-tag govuk-tag--yellow">Low risk<span class="govuk-visually-hidden"> services</span>:</strong>'
+        },
+        value: {
+          text: overview.stats.low_risk
+        }
+      },
+      {
+        key: {
+          html: '<strong class="govuk-tag govuk-tag--green">Compliant<span class="govuk-visually-hidden"> services</span>:</strong>'
+        },
+        value: {
+          text: overview.stats.compliant_risk
+        }
+      }
+    ]
+  }) }}
+
+  {{ statsSection({
+    service_name: config.org_name,
+    heading: 'Compliance',
+    heading_hidden: 'of ' + config.org_name,
+    heading_level: 3,
+    stats_type: 'true',
+
+    rate_total: overview.stats.rates.true_total,
+    total_live: overview.stats.total_live,
+    total_live_compliant: overview.stats.total_live_compliant,
+
+    rate_citizen: overview.stats.rates.true_citizen,
+    total_live_citizen: overview.stats.total_live_citizen,
+    total_live_compliant_citizen: overview.stats.total_live_compliant_citizen,
+
+    rate_staff: overview.stats.rates.true_staff,
+    total_live_staff: overview.stats.total_live_staff,
+    total_live_compliant_staff: overview.stats.total_live_compliant_staff,
+
+    total_descoped: overview.stats.total_descoped
+  }) }}
+
+  <h2>Recently updated</h2>
+
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <a href="">Service 1</a>
+    </dt>
+    <dd class="govuk-summary-list__value">
+      User research done
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <a href="">Service 2</a>
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Added to system
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <a href="">Service 3</a>
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Email sent
+    </dd>
+
+  </div>
+</dl>
+
+</div>
+{%- endblock -%}

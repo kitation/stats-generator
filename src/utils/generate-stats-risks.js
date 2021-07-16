@@ -17,5 +17,4 @@ function generateRisks (service, stats) {
 
   return stats
 }
-
 module.exports = { generateRisks }
